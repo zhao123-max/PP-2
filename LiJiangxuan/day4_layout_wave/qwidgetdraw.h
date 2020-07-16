@@ -15,18 +15,28 @@ public:
     int y = 0;
     int dir = 0;
     int cnt = 0;
+    int index = 0;
+    int lastData = 0;
+    int waveLength = 0;
+    int *wave;
+    int maxData;
 
-    explicit QWidgetDraw(QWidget *parent = nullptr);
-
+    QWidgetDraw(QWidget *parent = nullptr);
+    QWidgetDraw(int *wave, int waveLen, int maxData, QWidget *parent = nullptr);
     void draw(QPainter *painter);
     void drawDemo(QPainter *painter);
     void drawTriangle(QPainter *painter);
     void drawTriangleNew(QPainter *painter);
+    void drawWaveFromArray(QPainter *painter);
+    void drawWave(QPainter *painter, int data);
     void refresh();
+    void refreshFromData(int data);
+    void sendData();
 private:
     void paintEvent(QPaintEvent *event) override;
 
 signals:
+    void rxDataSignal(int data);
 
 };
 
