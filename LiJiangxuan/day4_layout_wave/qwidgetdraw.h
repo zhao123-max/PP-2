@@ -11,7 +11,7 @@ class QWidgetDraw : public QWidget
 public:
     QTimer *timer;
     QPixmap *map;
-    int  x = 0;
+    int x = 0;
     int y = 0;
     int dir = 0;
     int cnt = 0;
@@ -34,7 +34,7 @@ public:
     void sendData();
 private:
     void paintEvent(QPaintEvent *event) override;
-
+    void resizeEvent(QResizeEvent *event) override;
 signals:
     void rxDataSignal(int data);
 
