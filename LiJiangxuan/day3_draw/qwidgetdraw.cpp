@@ -3,7 +3,6 @@
 
 QWidgetDraw::QWidgetDraw(QWidget *parent) : QWidget(parent)
 {
-    this->setWindowTitle("叫什么都");
 }
 
 void QWidgetDraw::paintEvent(QPaintEvent *event)
