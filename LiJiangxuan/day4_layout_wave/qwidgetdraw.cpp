@@ -3,7 +3,7 @@
 
 QWidgetDraw::QWidgetDraw(QWidget *parent) : QWidget(parent)
 {
-    this->resize(1600, 300);
+//    this->resize(1600, 300);
     this->map = new QPixmap(this->width(), this->height());
     this->map->fill(Qt::black);
 
@@ -16,7 +16,7 @@ QWidgetDraw::QWidgetDraw(QWidget *parent) : QWidget(parent)
 QWidgetDraw::QWidgetDraw(int *wave, int waveLen, int maxData, QWidget *parent)
     :QWidget(parent),  waveLength(waveLen), wave(wave), maxData(maxData)
 {
-    this->resize(1600, 400);
+//    this->resize(1600, 400);
     this->map = new QPixmap(this->width(), this->height());
     this->map->fill(Qt::black);
 
@@ -79,6 +79,17 @@ void QWidgetDraw::paintEvent(QPaintEvent *event)
     painter->drawPixmap(0, 0, *this->map);
 
     painter->end();
+}
+
+void QWidgetDraw::resizeEvent(QResizeEvent *event)
+{
+    QPixmap *cleanmap = new QPixmap(this->width(), this->height());
+    cleanmap->fill(Qt::black);
+    // 析构指针
+    delete  this->map;
+    this->map = cleanmap;
+    this->x = 0;
+//    this->y = 0;
 }
 
 void QWidgetDraw::draw(QPainter *painter)
