@@ -55,12 +55,23 @@ unsigned int ecgD[] =
     2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000
 };
 
-QWidgetSerialTx::QWidgetSerialTx(QWidget *parent) : QWidget(parent)
+QWidgetSerialTx::QWidgetSerialTx(const QString &portName, QWidget *parent)
+    : QWidget(parent), portName(portName)
 {
     this->serialInit();
     this->timer = new QTimer();
     connect(this->timer, &QTimer::timeout, this, &QWidgetSerialTx::sendEcgPkg);
     this->timer->start(1000);
+
+}
+
+QWidgetSerialTx::QWidgetSerialTx(int cycle, const QString &portName, QWidget *parent)
+    : QWidget(parent), portName(portName)
+{
+    this->serialInit();
+    this->timer = new QTimer();
+    connect(this->timer, &QTimer::timeout, this, &QWidgetSerialTx::sendEcgPkg);
+    this->timer->start(cycle);
 
 }
 
@@ -73,7 +84,7 @@ void QWidgetSerialTx::sendEcgPkg()
     char byteH,  byteL;
 
     // 取心电数据/获取ADC数据
-    ecgData[1] = this->getEcgData();
+    ecgData[1] = this->getData();
 
     // 数据包格式： ID + 数据头 + 数据 + 校验
     // 数据打包
@@ -101,7 +112,7 @@ void QWidgetSerialTx::sendEcgPkg()
 
 }
 
-unsigned int QWidgetSerialTx::getEcgData()
+unsigned int QWidgetSerialTx::getData()
 {
     this->index += 1;
 
@@ -124,7 +135,7 @@ int QWidgetSerialTx::serialInit()
     // 创建串口对象
     this->com = new QSerialPort();
     // 打开串口
-    this->com->setPortName("COM1");
+    this->com->setPortName(portName);
     if (!this->com->open(QIODevice::ReadWrite))
     {
         qDebug()<<"打开串口错误";

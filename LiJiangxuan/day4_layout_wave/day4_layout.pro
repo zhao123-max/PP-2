@@ -10,6 +10,7 @@ SOURCES += \
 
 HEADERS += \
     data.h \
-    qwidgetdraw.h
+    qwidgetdraw.h \
     qwidgetserialrx.h \
-    qwidgetserialtx.h
+    qwidgetserialtx.h \
+    wavedata.h

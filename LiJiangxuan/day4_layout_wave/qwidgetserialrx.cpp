@@ -1,6 +1,7 @@
 #include "qwidgetserialrx.h"
 
-QWidgetSerialRx::QWidgetSerialRx(QWidget *parent): QWidget(parent)
+QWidgetSerialRx::QWidgetSerialRx(const QString &portName, QWidget *parent)
+    : QWidget(parent), portName(portName)
 {
     if (-1 == this->serialInit())
         return;
@@ -97,7 +98,7 @@ int QWidgetSerialRx::serialInit()
     // 创建串口对象
     this->com = new QSerialPort();
     // 打开串口
-    this->com->setPortName("COM2");
+    this->com->setPortName(portName);
     if (!this->com->open(QIODevice::ReadWrite))
     {
         qDebug()<<"打开串口错误"<<this->com->portName();

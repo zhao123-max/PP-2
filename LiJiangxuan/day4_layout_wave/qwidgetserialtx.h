@@ -14,12 +14,15 @@ public:
     QSerialPort *com;
     QTimer *timer;
     int index = 0;
-
-    explicit QWidgetSerialTx(QWidget *parent = nullptr);
+    // 防止隐式转换
+    explicit QWidgetSerialTx(const QString &portName, QWidget *parent = nullptr);
+    explicit QWidgetSerialTx(int cycle, const QString &portName, QWidget *parent = nullptr);
 
     void sendEcgPkg();
     int serialInit();
-    unsigned int getEcgData();
+    unsigned int getData();
+private:
+    QString portName;
 signals:
 
 };

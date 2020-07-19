@@ -19,10 +19,12 @@ public:
     unsigned char pkgDataHead;
     int ecg1, ecg2, ecg3;
 
-    explicit QWidgetSerialRx(QWidget *parent = nullptr);
+    explicit QWidgetSerialRx(const QString &portName, QWidget *parent = nullptr);
     int serialInit();
     void serialRx();
     void rxDataHandle(unsigned char data);
+private:
+    QString portName;
 };
 
 #endif // QWIDGETSERIALRX_H

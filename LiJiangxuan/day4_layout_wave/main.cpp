@@ -20,7 +20,8 @@ void testSerialPort(void);
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    homework();
+//    homework();
+    testSerialPort();
     return a.exec();
 }
 
@@ -43,7 +44,7 @@ void homework(void)
     qvbl->addWidget(drawWidget_a);
     qvbl->addWidget(drawWidget_b);
     winMain->setWindowTitle("八仙过海队");
-    winMain->resize(1600, 600);
+    winMain->resize(1000, 600);
     winMain->setLayout(qvbl);
     winMain->show();
 }
@@ -51,8 +52,8 @@ void homework(void)
 void testSerialPort(void)
 {
     QWidget *mainWin = new QWidget();
-    QWidgetSerialTx *serialTx = new QWidgetSerialTx(mainWin);
-    QWidgetSerialRx *serialRx = new QWidgetSerialRx(mainWin);
+    QWidgetSerialTx *serialTx = new QWidgetSerialTx("COM1", mainWin);
+    QWidgetSerialRx *serialRx = new QWidgetSerialRx("COM2", mainWin);
 
     mainWin->resize(300, 300);
     mainWin->show();
