@@ -6,20 +6,21 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include "qwidgetdraw.h"
+
 #include "data.h"
+#include "qwidgetserialtx.h"
+#include "qwidgetserialrx.h"
 
 void layoutdemo0(void);
 void layoutdemo1(void);
 
 void homework(void);
-
+void testSerialPort(void);
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     homework();
-
-//    layoutdemo0();
     return a.exec();
 }
 
@@ -45,6 +46,16 @@ void homework(void)
     winMain->resize(1600, 600);
     winMain->setLayout(qvbl);
     winMain->show();
+}
+
+void testSerialPort(void)
+{
+    QWidget *mainWin = new QWidget();
+    QWidgetSerialTx *serialTx = new QWidgetSerialTx(mainWin);
+    QWidgetSerialRx *serialRx = new QWidgetSerialRx(mainWin);
+
+    mainWin->resize(300, 300);
+    mainWin->show();
 }
 
 void layoutdemo0(void)
@@ -118,3 +129,4 @@ void layoutdemo1(void)
 
     winMain->show();
 }
+
