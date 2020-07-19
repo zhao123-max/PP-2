@@ -10,7 +10,7 @@ class QWidgetDraw : public QWidget
     Q_OBJECT
 public:
     QTimer *timer;
-    QPixmap *map;
+    QPixmap map;
     int x = 0;
     int y = 0;
     int dir = 0;

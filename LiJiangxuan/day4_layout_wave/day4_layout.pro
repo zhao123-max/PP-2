@@ -9,6 +9,7 @@ SOURCES += \
     qwidgetserialtx.cpp
 
 HEADERS += \
-    qwidgetdraw.h \
+    data.h \
+    qwidgetdraw.h
     qwidgetserialrx.h \
     qwidgetserialtx.h
