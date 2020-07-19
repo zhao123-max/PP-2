@@ -7,4 +7,5 @@ SOURCES += \
     qwidgetdraw.cpp
 
 HEADERS += \
+    data.h \
     qwidgetdraw.h

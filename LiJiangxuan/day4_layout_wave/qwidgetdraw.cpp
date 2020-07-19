@@ -4,8 +4,8 @@
 QWidgetDraw::QWidgetDraw(QWidget *parent) : QWidget(parent)
 {
 //    this->resize(1600, 300);
-    this->map = new QPixmap(this->width(), this->height());
-    this->map->fill(Qt::black);
+    this->map = QPixmap(this->width(), this->height());
+    this->map.fill(Qt::black);
 
     this->timer = new QTimer(this);
     this-> timer->start(10);
@@ -17,8 +17,8 @@ QWidgetDraw::QWidgetDraw(int *wave, int waveLen, int maxData, QWidget *parent)
     :QWidget(parent),  waveLength(waveLen), wave(wave), maxData(maxData)
 {
 //    this->resize(1600, 400);
-    this->map = new QPixmap(this->width(), this->height());
-    this->map->fill(Qt::black);
+    this->map = QPixmap(this->width(), this->height());
+    this->map.fill(Qt::black);
 
     this->timer = new QTimer(this);
     this-> timer->start(10);
@@ -44,7 +44,7 @@ void QWidgetDraw::sendData()
 void QWidgetDraw::refreshFromData(int data)
 {
     QPainter *painter = new QPainter();
-    painter->begin(this->map);
+    painter->begin(&this->map);
     QPen *pen = new QPen();
     pen->setWidth(2);
     pen->setColor(Qt::green);
@@ -60,7 +60,7 @@ void QWidgetDraw::refreshFromData(int data)
 void QWidgetDraw::refresh()
 {
     QPainter *painter = new QPainter();
-    painter->begin(this->map);
+    painter->begin(&this->map);
 
     this->draw(painter);
 
@@ -76,17 +76,16 @@ void QWidgetDraw::paintEvent(QPaintEvent *event)
 
     painter->begin(this);
 //    this->draw(painter);
-    painter->drawPixmap(0, 0, *this->map);
+    painter->drawPixmap(0, 0, this->map);
 
     painter->end();
 }
 
 void QWidgetDraw::resizeEvent(QResizeEvent *event)
 {
-    QPixmap *cleanmap = new QPixmap(this->width(), this->height());
-    cleanmap->fill(Qt::black);
+    QPixmap cleanmap = QPixmap(this->width(), this->height());
+    cleanmap.fill(Qt::black);
     // 析构指针
-    delete  this->map;
     this->map = cleanmap;
     this->x = 0;
 //    this->y = 0;
