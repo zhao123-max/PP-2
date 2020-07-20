@@ -3,7 +3,7 @@
 
 #define SPO2_SAMPLE_RATE 60 //test 2019 //125
 
-static  const unsigned char  Spo2_DemoData[248] =
+static int Spo2_DemoData[248] =
 {
     0x21, 0x21, 0x22, 0x22, 0x23, 0x22, 0x22, 0x21, 0x21,
     0x20, 0x20, 0x1f, 0x1e, 0x1d, 0x1c, 0x1b, 0x1b, 0x1a,
@@ -37,7 +37,7 @@ static  const unsigned char  Spo2_DemoData[248] =
 
 #define ECG500HZ 500 //test 2019 //125
 
-static const unsigned short int Ecg2_500DemoData[ ECG500HZ ] = {
+static int Ecg2_500DemoData[ ECG500HZ ] = {
 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
@@ -92,7 +92,7 @@ static const unsigned short int Ecg2_500DemoData[ ECG500HZ ] = {
 };
 
 #define IBP_SAMPLE_RATE 125
-const unsigned short int Ibp2_DemoData[IBP_SAMPLE_RATE] =
+static int Ibp2_DemoData[IBP_SAMPLE_RATE] =
 {
   0x0f, 0x10, 0x10, 0x11, 0x12, 0x12, 0x12, 0x13, 0x13,
   0x14, 0x14, 0x14, 0x14, 0x15, 0x17, 0x17, 0x17, 0x18,

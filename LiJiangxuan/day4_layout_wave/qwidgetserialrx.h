@@ -17,6 +17,8 @@ public:
     unsigned char pkgDataCrc;
     unsigned char pkgData[7];
     unsigned char pkgDataHead;
+    unsigned char pkgLen;
+    unsigned char pkgID;
     int ecg1, ecg2, ecg3;
 
     explicit QWidgetSerialRx(const QString &portName, QWidget *parent = nullptr);
@@ -25,6 +27,8 @@ public:
     void rxDataHandle(unsigned char data);
 private:
     QString portName;
+signals:
+    void rxDataSignal(char pID, int data);
 };
 
 #endif // QWIDGETSERIALRX_H

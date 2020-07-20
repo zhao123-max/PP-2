@@ -13,16 +13,25 @@ class QWidgetSerialTx : public QWidget
 public:
     QSerialPort *com;
     QTimer *timer;
-    int index = 0;
+
     // 防止隐式转换
     explicit QWidgetSerialTx(const QString &portName, QWidget *parent = nullptr);
-    explicit QWidgetSerialTx(int cycle, const QString &portName, QWidget *parent = nullptr);
+    explicit QWidgetSerialTx(int cycle, const QString &portName, int pkgLen = 10, QWidget *parent = nullptr);
+    explicit QWidgetSerialTx(int cycle, const QString &portName, int *source, int sLen, int pkgLen, QWidget *parent);
 
-    void sendEcgPkg();
+    virtual void sendPkg() = 0;
     int serialInit();
-    unsigned int getData();
-private:
+    int getData();
+//    ~QWidgetSerialTx() { delete  com; delete timer;};
+//private:
     QString portName;
+    int pkgLen;
+    int *dataSource;
+    int sourceLen;
+    int index = 0;
+    char pkgID;
+
+    virtual char *packageData() = 0;;
 signals:
 
 };

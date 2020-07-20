@@ -8,20 +8,27 @@
 #include "qwidgetdraw.h"
 
 #include "data.h"
+#include "wavedata.h"
 #include "qwidgetserialtx.h"
 #include "qwidgetserialrx.h"
+#include "qwidgetserialtxecg.h"
+#include "qwidgetserialtxibp2.h"
+#include "qwidgetserialtxspo2.h"
+#include "qwidgetdrawforserialrx.h"
 
 void layoutdemo0(void);
 void layoutdemo1(void);
 
 void homework(void);
 void testSerialPort(void);
+void testTxRxDraw();
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 //    homework();
-    testSerialPort();
+//    testSerialPort();
+    testTxRxDraw();
     return a.exec();
 }
 
@@ -33,27 +40,134 @@ void homework(void)
     int maxECG = 4096;
     int lenOfSin = sizeof(sinWave)/sizeof(int);
     int maxSin = 3000;
-    QWidgetDraw *drawWidget_a = new QWidgetDraw(ecgWave, lenOfECG, maxECG);
-    QWidgetDraw *drawWidget_b = new QWidgetDraw(sinWave, lenOfSin, maxSin*1.5);
+    QWidgetDraw *drawWidget_a = new QWidgetDraw(10, Ecg2_500DemoData, 500, maxECG);
+    QWidgetDraw *drawWidget_b = new QWidgetDraw(20, Ibp2_DemoData, 125, 120);
+    QWidgetDraw *drawWidget_c = new QWidgetDraw(40, Spo2_DemoData, 248, 100);
 
     drawWidget_a->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
     drawWidget_b->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+    drawWidget_c->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+
+    drawWidget_a->setLabelText("ECG     I");
+    drawWidget_b->setLabelText("ECG     II");
+    drawWidget_c->setLabelText("ECG     III");
 
     // 创建垂直箱式 layout
     QVBoxLayout *qvbl = new QVBoxLayout();
     qvbl->addWidget(drawWidget_a);
     qvbl->addWidget(drawWidget_b);
+    qvbl->addWidget(drawWidget_c);
+
+
+    /*********************************************************/
+    // 添加按钮和标签
+    QLabel *widgetHr = new QLabel();
+    QLabel *widgetNibp = new QLabel();
+    widgetHr->setText("HR");
+    widgetNibp->setText("NiBP");
+
+    QPushButton *btnUp = new QPushButton("UP");
+    QPushButton *btnDowm = new QPushButton("DOWN");
+
+    btnUp->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+    btnDowm->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+
+
+    QVBoxLayout *lytLabelBtn = new QVBoxLayout();
+    lytLabelBtn->addWidget(widgetHr);
+    lytLabelBtn->addWidget(widgetNibp);
+    lytLabelBtn->addWidget(btnUp);
+    lytLabelBtn->addWidget(btnDowm);
+
+    QHBoxLayout *lytMain = new QHBoxLayout();
+    lytMain->addLayout(qvbl);
+    lytMain->addLayout(lytLabelBtn);
+    // 配置拉伸因子
+    lytMain->setStretchFactor(qvbl, 2);
+    lytMain->setStretchFactor(lytLabelBtn, 1);
+
     winMain->setWindowTitle("八仙过海队");
     winMain->resize(1000, 600);
-    winMain->setLayout(qvbl);
+    winMain->setLayout(lytMain);
     winMain->show();
+}
+
+void testTxRxDraw()
+{
+    QWidget *mainWin = new QWidget();
+    // 发送
+    QWidgetSerialTxEcg *serialTx = new QWidgetSerialTxEcg(2, "COM1", Ecg2_500DemoData, 500, mainWin);
+    QWidgetSerialTxIBP2 *serialTx2 = new QWidgetSerialTxIBP2(8, "COM3", Ibp2_DemoData, 125, mainWin);
+    QWidgetSerialTxSPO2 *serialTx3 = new QWidgetSerialTxSPO2(4, "COM5", Spo2_DemoData, 248, mainWin);
+
+    // 接收并画图
+    QWidgetDrawForSerialRx *drawEcg = new QWidgetDrawForSerialRx();
+    QWidgetDrawForSerialRx *drawIBP = new QWidgetDrawForSerialRx();
+    QWidgetDrawForSerialRx *drawSPO2 = new QWidgetDrawForSerialRx();
+
+    // 启动
+    drawEcg->initReceiver("COM2", 4096);
+    drawIBP->initReceiver("COM4", 80);
+    drawSPO2->initReceiver("COM6", 100);
+
+    // 位置摆放
+    drawEcg->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+    drawSPO2->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+    drawIBP->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+
+    drawEcg->setLabelText("ECG");
+    drawSPO2->setLabelText("SPO2");
+    drawIBP->setLabelText("IBP2");
+
+    // 创建垂直箱式 layout
+    QVBoxLayout *qvbl = new QVBoxLayout();
+    qvbl->addWidget(drawEcg);
+    qvbl->addWidget(drawSPO2);
+    qvbl->addWidget(drawIBP);
+
+    /*********************************************************/
+    // 添加按钮和标签
+    QLabel *widgetHr = new QLabel();
+    QLabel *widgetNibp = new QLabel();
+    widgetHr->setText("HR");
+    widgetNibp->setText("NiBP");
+
+    QPushButton *btnUp = new QPushButton("UP");
+    QPushButton *btnDowm = new QPushButton("DOWN");
+
+    btnUp->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+    btnDowm->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+
+
+    QVBoxLayout *lytLabelBtn = new QVBoxLayout();
+    lytLabelBtn->addWidget(widgetHr);
+    lytLabelBtn->addWidget(widgetNibp);
+    lytLabelBtn->addWidget(btnUp);
+    lytLabelBtn->addWidget(btnDowm);
+
+    QHBoxLayout *lytMain = new QHBoxLayout();
+    lytMain->addLayout(qvbl);
+    lytMain->addLayout(lytLabelBtn);
+    // 配置拉伸因子
+    lytMain->setStretchFactor(qvbl, 2);
+    lytMain->setStretchFactor(lytLabelBtn, 1);
+
+    mainWin->setWindowTitle("八仙过海队");
+    mainWin->resize(1000, 600);
+    mainWin->setLayout(lytMain);
+    mainWin->show();
 }
 
 void testSerialPort(void)
 {
     QWidget *mainWin = new QWidget();
-    QWidgetSerialTx *serialTx = new QWidgetSerialTx("COM1", mainWin);
+    // int *source, Len
+    QWidgetSerialTxEcg *serialTx = new QWidgetSerialTxEcg(2, "COM1", Ecg2_500DemoData, 500, mainWin);
+    QWidgetSerialTxIBP2 *serialTx2 = new QWidgetSerialTxIBP2(8, "COM3", Ibp2_DemoData, 125, mainWin);
+    QWidgetSerialTxSPO2 *serialTx3 = new QWidgetSerialTxSPO2(4, "COM5", Spo2_DemoData, 248, mainWin);
     QWidgetSerialRx *serialRx = new QWidgetSerialRx("COM2", mainWin);
+    QWidgetSerialRx *serialRx2 = new QWidgetSerialRx("COM4", mainWin);
+    QWidgetSerialRx *serialRx3 = new QWidgetSerialRx("COM6", mainWin);
 
     mainWin->resize(300, 300);
     mainWin->show();

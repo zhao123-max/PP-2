@@ -4,28 +4,34 @@
 QWidgetDraw::QWidgetDraw(QWidget *parent) : QWidget(parent)
 {
 //    this->resize(1600, 300);
+    this->label = new QLabel(this);
+    this->label->setStyleSheet("color: white");
+
     this->map = QPixmap(this->width(), this->height());
     this->map.fill(Qt::black);
 
-    this->timer = new QTimer(this);
-    this-> timer->start(10);
-    connect(timer, &QTimer::timeout, this, &QWidgetDraw::sendData);
-    connect(this, &QWidgetDraw::rxDataSignal, this, &QWidgetDraw::refreshFromData);
 }
 
-QWidgetDraw::QWidgetDraw(int *wave, int waveLen, int maxData, QWidget *parent)
+QWidgetDraw::QWidgetDraw(int cycle, int *wave, int waveLen, int maxData, QWidget *parent)
     :QWidget(parent),  waveLength(waveLen), wave(wave), maxData(maxData)
 {
 //    this->resize(1600, 400);
+    this->label = new QLabel(this);
+    this->label->setStyleSheet("color: white");
+
     this->map = QPixmap(this->width(), this->height());
     this->map.fill(Qt::black);
 
     this->timer = new QTimer(this);
-    this-> timer->start(10);
+    this-> timer->start(cycle);
     connect(timer, &QTimer::timeout, this, &QWidgetDraw::sendData);
     connect(this, &QWidgetDraw::rxDataSignal, this, &QWidgetDraw::refreshFromData);
 }
 
+void QWidgetDraw::setLabelText(const QString &s)
+{
+    this->label->setText(s);
+}
 
 void QWidgetDraw::sendData()
 {
@@ -33,7 +39,7 @@ void QWidgetDraw::sendData()
     int height = this->height();
     data = height - wave[index]*height/maxData;
 
-    this->index += 3;
+    this->index += 1;
 
     if (this->index >= waveLength)
         this->index = 0;
