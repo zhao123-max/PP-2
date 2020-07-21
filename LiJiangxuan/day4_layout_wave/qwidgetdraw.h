@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QPainter>
 #include <QTimer>
+#include <QLabel>
 
 class QWidgetDraw : public QWidget
 {
@@ -11,6 +12,7 @@ class QWidgetDraw : public QWidget
 public:
     QTimer *timer;
     QPixmap map;
+    QLabel *label;
     int x = 0;
     int y = 0;
     int dir = 0;
@@ -22,7 +24,7 @@ public:
     int maxData;
 
     QWidgetDraw(QWidget *parent = nullptr);
-    QWidgetDraw(int *wave, int waveLen, int maxData, QWidget *parent = nullptr);
+    QWidgetDraw(int cycle, int *wave, int waveLen, int maxData, QWidget *parent = nullptr);
     void draw(QPainter *painter);
     void drawDemo(QPainter *painter);
     void drawTriangle(QPainter *painter);
@@ -32,6 +34,7 @@ public:
     void refresh();
     void refreshFromData(int data);
     void sendData();
+    void setLabelText(const QString &s);
 private:
     void paintEvent(QPaintEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
