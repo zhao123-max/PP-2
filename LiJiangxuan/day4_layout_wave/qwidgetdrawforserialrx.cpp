@@ -5,7 +5,6 @@ QWidgetDrawForSerialRx(QWidget *parent)
     : QWidgetDraw(parent)
 {
 
-    this->times = 0;
 }
 
 void QWidgetDrawForSerialRx::
@@ -19,13 +18,6 @@ initReceiver(const QString &pName, int maxD)
 void QWidgetDrawForSerialRx::
 refreshFromData(char pID, int data)
 {
-//    if (this->times >= 3) {
-//        this->times = 0;
-//        this->update();
-//        return;
-//    }
-//    this->times += 1;
-//    qDebug()<<"!!!!!!!!!!!!!!!!!!!!!!!recD"<<data;
     int height = this->height();
     data = height - data*height/this->maxData;
 

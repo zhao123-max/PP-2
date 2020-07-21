@@ -41,6 +41,6 @@ char *QWidgetSerialTxIBP2::packageData()
     dataBuf[2] = 0x80 | ibpData;
     dataBuf[3] = 0xFF;              // 用不到
     dataBuf[4] = 0xFF;              // 用不到
-    qDebug()<<"IBP Tx:==============";
+    qDebug()<<"IBP2 Tx:====================";
     return dataBuf;
 }

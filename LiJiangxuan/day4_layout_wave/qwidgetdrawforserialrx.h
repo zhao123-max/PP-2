@@ -14,8 +14,6 @@ public:
 
     void initReceiver(const QString &pName, int maxD);
     void refreshFromData(char pID, int data);
-
-    int times;
 };
 
 #endif // QWIDGETDRAWFORSERIALRX_H

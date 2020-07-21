@@ -108,10 +108,10 @@ void QWidgetSerialRx::rxDataHandle(unsigned char data)
             qDebug()<<"ecgRx: ecg ="<< ecg1 <<" ecg2 ="<<ecg2<<" ecg3 ="<<ecg3;
         } else if ( this->pkgID == 0x09 ) {// SPO2
             ecg1 = this->pkgData[0];
-            qDebug("SPO2 Rx: spo2 = %.2x", ecg1);//<<"SPO2 Rx: spo2 ="<< ecg1;
+            qDebug("SPO2 Rx: spo2 = %d", ecg1);//<<"SPO2 Rx: spo2 ="<< ecg1;
         } else if (this->pkgID == 0x0a ){
             ecg1 = this->pkgData[0];
-            qDebug("IBP Rx: ibp = %d", ecg1);//<<"IBP Rx: ibp =" << ecg1;
+            qDebug("IBP Rx: ibp2 = %d", ecg1);//<<"IBP Rx: ibp =" << ecg1;
         } else
             qDebug()<<"ERROR!";
 
