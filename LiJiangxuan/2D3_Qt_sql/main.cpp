@@ -12,7 +12,7 @@ class PatientModel: public QSqlQueryModel
 public:
     PatientModel()
     {
-        this->setQuery("SELECT *FROM patient");
+        this->setQuery("SELECT *FROM patients");
     }
 
     Qt::ItemFlags flags(const QModelIndex &index) const override
@@ -22,6 +22,55 @@ public:
         if (index.column() == 1 || index.column() == 2)
             flags |= Qt::ItemIsEditable;
         return flags;
+    }
+
+    bool setName(int id, const QString &name)
+    {
+        QSqlQuery query;
+
+         query.prepare("UPDATE patients SET name = ? WHERE  id = ?");
+         query.addBindValue(name);
+         query.addBindValue(id);
+         return query.exec();
+    }
+
+    bool setGender(int id, const QString &gender)
+    {
+        QSqlQuery query;
+
+        query.prepare("UPDATE patients SET gender = ? WHERE  id = ?");
+        query.addBindValue(gender);
+        query.addBindValue(id);
+        return query.exec();
+    }
+
+    bool setData(const QModelIndex &index, const QVariant &value, int) override
+    {
+        if (index.column() < 1 || index.column() > 2)
+            return false;
+        // 获取当前列 当前行 用 sql 更新数据
+        //
+        QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
+        // 得到第 0 列的内容
+        int id = this->data(primaryKeyIndex).toInt();
+
+        bool ok = false;
+        if (index.column() == 1)
+        {
+            //todo 更新姓名
+            qDebug()<<"更新姓名"<<value.toString();
+            ok = this->setName(id, value.toString());
+        } else if (index.column() == 2)
+        {
+            //todo 更新性别
+            qDebug()<<"更新性别";
+            ok = this->setGender(id, value.toString());
+        } else
+        {
+            qDebug()<<"error";
+        }
+
+        if (ok) this->setQuery("SELECT * FROM patients");
     }
 };
 
@@ -95,7 +144,12 @@ int main(int argc, char *argv[])
             qDebug()<<"读取错误"<<query.lastError();
         }
  /******************** 下午 *************/
-    // 获取当前设备是否已在设备表中
+
+/*
+ * 以上代码在工作站
+ ************************************************************
+ * 下面代码运行在设备端
+ */
         query.prepare("SELECT * from device "
                       "WHERE serial = :serial");
         query.bindValue(":serial", "DEV-007");
@@ -154,5 +208,48 @@ int main(int argc, char *argv[])
         if(!queryOk)
             qDebug()<<"更新设备在线状态错误";
     }
+
+/*
+* 下面代码运行在工作站
+*/
+    // 显示设备列表
+    // 创建表格对象
+    QWidget *mainWin  = new QWidget();
+    // 显示设备列表
+    // 创建表格对象
+    QTableView *view = new QTableView();
+
+    // 创建模型对象
+    QSqlQueryModel model;
+    model.setQuery("SELECT dev_id, serial, now()-refresh < 20 AS online FROM device");
+
+    view->setModel(&model);
+    view->show();
+
+    // 显示病人列表
+    // 创建表格对象
+    QTableView *patientView = new QTableView();
+
+    // 创建模型对象
+    PatientModel patientModel;
+//    patientModel.setQuery("SELECT * FROM patients");
+
+    patientView->setModel(&patientModel);
+    patientView->show();
+
+    QTableView *devicePatientView = new QTableView();
+
+    // 创建模型对象
+    QSqlQueryModel devicePatientModel;
+    devicePatientModel.setQuery("SELECT * FROM patients "
+                   "LEFT JOIN device_patient "
+                   "ON patients.id = device_patient.id "
+                   "LEFT JOIN device "
+                   "ON device.dev_id = device_patient.dev_id");
+
+    devicePatientView->setModel(&devicePatientModel);
+    devicePatientView->show();
+
+
     return a.exec();
 }
