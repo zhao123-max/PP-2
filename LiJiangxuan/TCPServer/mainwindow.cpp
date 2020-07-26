@@ -50,5 +50,9 @@ void MainWindow::tcpDisconnect()
 void MainWindow::on_pushButton_clicked()
 {
     this->mSocket->write(this->ui->lineEdit->text().toLatin1());
+    // 这边其实还是有问题的啊
+    // 数据库查询语句好传，但是查询的结果并不好传递
+
+//    this->mSocket->writeData()
 
 }

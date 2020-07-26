@@ -2,6 +2,8 @@
 #define LOGINMODEL_H
 
 #include <QObject>
+#include <QPushButton>
+#include <QDebug>
 
 class LoginModel : public QObject
 {
@@ -10,8 +12,14 @@ public:
     QString *username;
     QString *password;
 
+    QPushButton *btn;
 
-    explicit LoginModel(QObject *parent = nullptr);
+    explicit LoginModel(QPushButton *btn, QObject *parent = nullptr);
+
+    void setLoginBtn(QPushButton *btn);
+
+private slots:
+    void loginBtnClicked();
 
 signals:
 

@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QLineEdit>
+#include "loginmodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -34,6 +35,9 @@ int main(int argc, char *argv[])
 //    添加一个按钮
      QPushButton *btn = new QPushButton("登录");
      layoutMain->addWidget(btn);
+
+     // 登录事件
+    LoginModel *login = new LoginModel(btn);
 
 
     QWidget *widgetMain = new QWidget();
